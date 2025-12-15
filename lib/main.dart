@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'learn_page.dart';
+import 'widgets/app_header.dart';
 
 void main() {
   runApp(const JomMudahJawiApp());
@@ -20,8 +20,15 @@ class JomMudahJawiApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String activeMenu = "Home"; // default active tab
 
   @override
   Widget build(BuildContext context) {
@@ -153,78 +160,12 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
-          Container(
-            height: 80,
-            color: Colors.white.withOpacity(0.95),
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: const [
-                    Icon(Icons.language, color: Colors.blue),
-                    SizedBox(width: 8),
-                    Text(
-                      "JOM MUDAH JAWI",
-                      style: TextStyle(
-                        color: Colors.blueAccent,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    NavItem(
-                      title: "Home",
-                      active: true,
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Home clicked")),
-                        );
-                      },
-                    ),
-                    NavItem(
-                      title: "Learn",
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LearnPage(),
-                          ),
-                        );
-                      },
-                    ),
-                    NavItem(
-                      title: "Quizzes",
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Quizzes clicked")),
-                        );
-                      },
-                    ),
-                    NavItem(
-                      title: "Games",
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Games clicked")),
-                        );
-                      },
-                    ),
-                    NavItem(
-                      title: "Log in",
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Log in clicked")),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          AppHeader(
+            activeMenu: activeMenu,
+            onMenuChanged: (menu) {
+              setState(() => activeMenu = menu);
+            },
+            parentContext: context,
           ),
         ],
       ),
@@ -263,37 +204,4 @@ class TopWaveClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}
-
-class NavItem extends StatelessWidget {
-  final String title;
-  final bool active;
-  final VoidCallback? onTap;
-
-  const NavItem({
-    super.key,
-    required this.title,
-    this.active = false,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 18.5,
-            color: active ? Colors.green.shade700 : Colors.black87,
-            fontWeight: active ? FontWeight.bold : FontWeight.normal,
-            decoration: active ? TextDecoration.underline : TextDecoration.none,
-          ),
-        ),
-      ),
-    );
-  }
 }
